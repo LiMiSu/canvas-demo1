@@ -6,25 +6,37 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
- <div id="canvas">
-     <script>
-         canvas.onclick = (e) => {
-             // console.log(e);
-             // console.log(e.clientX);
-             // console.log(e.clientY);
-             let div = document.createElement('div');
-             div.style.position = 'absolute';
-             div.style.left = e.clientX + 'px';
-             div.style.top = e.clientY + 'px';
-             div.style.width = '6px';
-             div.style.height = '6px';
-             div.style.marginLeft = '-3px';
-             div.style.marginTop = '-3px';
-             div.style.borderRadius = '50%';
-             div.style.backgroundColor = 'black';
-             canvas.appendChild(div);
-         }
-     </script>
- </div>
+<canvas id="canvas" width="100px" height="100px"></canvas>
+<script>
+
+    let canvas = document.getElementById('canvas');
+    //canvas的宽高是能再生成标签的时候设置，在css里设置是拉伸它的坐标
+    // canvas.width = document.body.clientWidth;//body宽高由内容撑起来
+    // canvas.height = document.body.clientHeight;
+    canvas.width = document.documentElement.clientWidth;//应该去获取文档的高度
+    canvas.height = document.documentElement.clientHeight;
+    let ctx = canvas.getContext('2d');
+    ctx.fillStyle = 'black';
+    ctx.strokeStyle = 'none';
+    let painting = false;
+
+    canvas.onmousedown = () => {
+        painting = true;
+    }
+    canvas.onmousemove = (e) => {
+        if (painting === true) {
+            // ctx.fillRect(e.clientX - 5, e.clientY - 5, 10, 10);//画矩形
+            ctx.beginPath();
+            ctx.arc(e.clientX, e.clientY, 10, 0, 2 * Math.PI);
+            ctx.stroke();
+            ctx.fill();
+        } else {
+
+        }
+    }
+    canvas.onmouseup = () => {
+        painting = false;
+    }
+</script>
 </body>
 </html>
