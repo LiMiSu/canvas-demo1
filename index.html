@@ -15,27 +15,77 @@
     // canvas.height = document.body.clientHeight;
     canvas.width = document.documentElement.clientWidth;//应该去获取文档的高度
     canvas.height = document.documentElement.clientHeight;
+    let painting = false;
+    let last;
+
     let ctx = canvas.getContext('2d');
     ctx.fillStyle = 'black';
     ctx.strokeStyle = 'none';
-    let painting = false;
 
-    canvas.onmousedown = () => {
-        painting = true;
+
+    //画连贯线条
+    function drawLine (x1, y1, x2, y2) {
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+        ctx.lineWidth = 10;
+        ctx.lineCap = 'round';
     }
-    canvas.onmousemove = (e) => {
-        if (painting === true) {
-            // ctx.fillRect(e.clientX - 5, e.clientY - 5, 10, 10);//画矩形
-            ctx.beginPath();
-            ctx.arc(e.clientX, e.clientY, 10, 0, 2 * Math.PI);
-            ctx.stroke();
-            ctx.fill();
-        } else {
+
+    let isTouchDevice = 'ontouchstart' in document.documentElement;//手机端
+    if (isTouchDevice) {
+        canvas.ontouchstart = (e) => {
+            let x = e.touches[0].clientX;//第一个手指
+            let y = e.touches[0].clientY;
+            last = [x, y];
+        }
+        canvas.ontouchmove = (e) => {
+         let x = e.touches[0].clientX;//第一个手指
+         let y = e.touches[0].clientY;
+
+
+         // ctx.beginPath();
+         // ctx.arc(x, y, 10, 0, 2 * Math.PI);
+         // ctx.stroke();
+         // ctx.fill();
+
+            drawLine(last[0], last[1], x, y);
+            last = [x, y];
+
+}
+    } else {
+
+        canvas.onmousedown = (e) => {
+            painting = true;
+
+            last = [e.clientX, e.clientY];//记录上一次
 
         }
-    }
-    canvas.onmouseup = () => {
-        painting = false;
+
+        canvas.onmousemove = (e) => {
+            if (painting === true) {
+
+                //画矩形
+                // ctx.fillRect(e.clientX - 5, e.clientY - 5, 10, 10);
+
+
+                //不连贯
+                // ctx.beginPath();
+                // ctx.arc(e.clientX, e.clientY, 10, 0, 2 * Math.PI);
+                // ctx.stroke();
+                // ctx.fill();
+
+
+
+                drawLine(last[0], last[1], e.clientX,e.clientY);
+                last = [e.clientX, e.clientY];
+            }
+        }
+
+        canvas.onmouseup = () => {
+            painting = false;
+        }
     }
 </script>
 </body>
