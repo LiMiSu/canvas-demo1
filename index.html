@@ -21,6 +21,8 @@
     let ctx = canvas.getContext('2d');
     ctx.fillStyle = 'black';
     ctx.strokeStyle = 'none';
+    ctx.lineWidth = 10;
+    ctx.lineCap = 'round';
 
 
     //画连贯线条
@@ -29,8 +31,6 @@
         ctx.moveTo(x1, y1);
         ctx.lineTo(x2, y2);
         ctx.stroke();
-        ctx.lineWidth = 10;
-        ctx.lineCap = 'round';
     }
 
     let isTouchDevice = 'ontouchstart' in document.documentElement;//手机端
@@ -87,6 +87,12 @@
             painting = false;
         }
     }
+
+    var a=1;
+    if (a===1)
+        console.log(a)
+        console.log('a')
+
 </script>
 </body>
 </html>
